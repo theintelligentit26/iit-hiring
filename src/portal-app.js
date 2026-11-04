@@ -4,6 +4,7 @@ import { createClient as Pa } from "@supabase/supabase-js";
 import { QUICK_VIEW_URL } from "./script-content.js";
 import { ScriptTab } from "./script-tab.jsx";
 import {
+  INVITE_BATCHES,
   TAB_BLURB,
   TAB_ORDER,
   isHired,
@@ -1436,7 +1437,15 @@ function Co() {
       re === `all` || re === `script`
         ? n
         : n.filter((row) => onTab(row.name, re)),
-    T = tabRows.filter((row) => S.includes(row.name));
+    T = tabRows.filter((row) => S.includes(row.name)),
+    groups =
+      re === `invites`
+        ? INVITE_BATCHES.map((batch) => ({
+            id: batch.id,
+            label: batch.label,
+            rows: de.filter((row) => batch.names.includes(row.name)),
+          }))
+        : [{ id: `main`, label: ``, rows: de }];
   function fe(e) {
     (ie(e), window.scrollTo({ top: 0 }));
   }
@@ -1669,13 +1678,15 @@ function Co() {
                       TAB_ORDER.find((tab) => tab.id === re)?.label ??
                       `Candidates`,
                   }),
-                  (0, z.jsx)(`p`, {
-                    className: `lede`,
-                    children:
-                      re === `all`
-                        ? `${n.length} active candidates from Supabase, ranked by score.`
-                        : (TAB_BLURB[re] ?? ``),
-                  }),
+                  re === `all` || TAB_BLURB[re]
+                    ? (0, z.jsx)(`p`, {
+                        className: `lede`,
+                        children:
+                          re === `all`
+                            ? `${n.length} active candidates from Supabase, ranked by score.`
+                            : TAB_BLURB[re],
+                      })
+                    : null,
                   (0, z.jsxs)(`section`, {
                     children: [
                       (0, z.jsxs)(`div`, {
@@ -1798,8 +1809,28 @@ function Co() {
                           }),
                         ],
                       }),
-                      (0, z.jsxs)(`div`, {
-                        id: `rank-table`,
+                      groups.map((group) =>
+                        (0, z.jsxs)(
+                          `div`,
+                          {
+                            className: `batch`,
+                            children: [
+                              group.label
+                                ? (0, z.jsxs)(`h2`, {
+                                    className: `batch-head`,
+                                    children: [
+                                      group.label,
+                                      ` (`,
+                                      group.rows.length,
+                                      `)`,
+                                    ],
+                                  })
+                                : null,
+                              (0, z.jsxs)(`div`, {
+                        id:
+                          group.id === `main` || group.id === `sent`
+                            ? `rank-table`
+                            : `rank-table-${group.id}`,
                         className: `rank-scroll`,
                         children: [
                           (0, z.jsxs)(`table`, {
@@ -1878,7 +1909,7 @@ function Co() {
                                 }),
                               }),
                               (0, z.jsx)(`tbody`, {
-                                children: de.map((t) => {
+                                children: group.rows.map((t) => {
                                   let n = se(t.name),
                                     r = qa(t.sYrs, t.yrs),
                                     i =
@@ -1993,7 +2024,7 @@ function Co() {
                               }),
                             ],
                           }),
-                          de.length === 0
+                          group.rows.length === 0
                             ? (0, z.jsx)(`p`, {
                                 className: `empty`,
                                 children:
@@ -2006,6 +2037,11 @@ function Co() {
                             : null,
                         ],
                       }),
+                            ],
+                          },
+                          group.id,
+                        ),
+                      ),
                     ],
                   }),
                   (0, z.jsxs)(`section`, {

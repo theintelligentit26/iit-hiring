@@ -2,28 +2,46 @@
 // Edit these arrays to move people between tabs.
 // "All candidates" always shows every row from public.hiring_candidates.
 // Names must match the row id (data->>'name'). Do not rename rows here.
+// Interview invites is one tab, shown as the two batches below.
+
+export const INVITE_BATCHES = [
+  {
+    id: "sent",
+    label: "Batch 1: invite sent on Indeed Nov 4, status Interviewing",
+    names: [
+      "Humberto Gutierrez",
+      "Nick Mitevski",
+      "Gene Berdnik",
+      "Geordin Smith",
+      "Alexander Valencia Bran",
+      "Marco Hernandez",
+      "Walter Calderon",
+      "Justin Caven",
+      "Brian Chu",
+    ],
+  },
+  {
+    id: "pending",
+    label: "Batch 2: invite not sent yet",
+    names: [
+      "Chase Reyes",
+      "Devin Rumer",
+      "Trishan Vithanage",
+      "Hassana Adamou",
+      "Steve Quintanilla",
+      "Daniel Mora",
+      "Aluizio Couto",
+      "Andrew Walldez",
+      "Antonio Gutierrez",
+      "Daniel Zaragoza",
+    ],
+  },
+];
 
 export const TAB_MEMBERS = {
-  invites: [
-    "Humberto Gutierrez",
-    "Nick Mitevski",
-    "Gene Berdnik",
-    "Geordin Smith",
-    "Alexander Valencia Bran",
-    "Marco Hernandez",
-    "Walter Calderon",
-    "Justin Caven",
-    "Brian Chu",
-  ],
+  invites: INVITE_BATCHES.flatMap((batch) => batch.names),
   review: [
-    "Chase Reyes",
     "Raymundo Lopez",
-    "Steve Quintanilla",
-    "Devin Rumer",
-    "Hassana Adamou",
-    "Aluizio Couto",
-    "Antonio Gutierrez",
-    "Andrew Walldez",
     "Nolen Pitre",
     "William Folgar",
     "Navin Prajapati",
@@ -40,10 +58,8 @@ export const TAB_ORDER = [
 ];
 
 export const TAB_BLURB = {
-  invites:
-    "Invite sent on Indeed Nov 4, status Interviewing",
   review:
-    "Backups worth a look: Chase Reyes, Raymundo Lopez and Steve Quintanilla, plus anyone 6.0+ flagged for distance or pay fit.",
+    "Raymundo Lopez, Nolen Pitre, William Folgar, and Navin Prajapati are still on this list.",
   hired: "Javier Abrica accepted and started Nov 2.",
 };
 

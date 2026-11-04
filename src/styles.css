@@ -12,5 +12,6 @@
 .red-flag{border-left:3px solid var(--red);background:#fff6f6;margin:0 0 8px;padding:8px 10px;font-size:15px}
 .score-card .muted{font-size:13px;font-weight:400}
 .phone-script h1{margin-top:0}
+.batch-head{margin:18px 0 8px;font-size:18px;line-height:1.35}
 #panel-script>.phone-script{margin-top:0}
 .q-block .good-answer,.q-block .red-flag{margin-left:0}
