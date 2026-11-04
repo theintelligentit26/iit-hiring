@@ -6,7 +6,6 @@
 export const TAB_MEMBERS = {
   invites: [
     "Humberto Gutierrez",
-    "Miguel Casiano",
     "Nick Mitevski",
     "Gene Berdnik",
     "Geordin Smith",
@@ -23,7 +22,7 @@ export const TAB_MEMBERS = {
     "Devin Rumer",
     "Hassana Adamou",
     "Aluizio Couto",
-    "Jeremy Hernandez",
+    "Antonio Gutierrez",
     "Andrew Walldez",
     "Nolen Pitre",
     "William Folgar",
@@ -42,7 +41,7 @@ export const TAB_ORDER = [
 
 export const TAB_BLURB = {
   invites:
-    "The interview-scheduling message is drafted for these 10; not sent yet.",
+    "Invite sent on Indeed Nov 4, status Interviewing",
   review:
     "Backups worth a look: Chase Reyes, Raymundo Lopez and Steve Quintanilla, plus anyone 6.0+ flagged for distance or pay fit.",
   hired: "Javier Abrica accepted and started Nov 2.",
