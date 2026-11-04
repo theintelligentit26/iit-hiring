@@ -40,12 +40,7 @@ export const INVITE_BATCHES = [
 
 export const TAB_MEMBERS = {
   invites: INVITE_BATCHES.flatMap((batch) => batch.names),
-  review: [
-    "Raymundo Lopez",
-    "Nolen Pitre",
-    "William Folgar",
-    "Navin Prajapati",
-  ],
+  review: ["Nolen Pitre"],
   hired: ["Javier Abrica"],
 };
 
@@ -59,7 +54,7 @@ export const TAB_ORDER = [
 
 export const TAB_BLURB = {
   review:
-    "Raymundo Lopez, Nolen Pitre, William Folgar, and Navin Prajapati are still on this list.",
+    "Nolen Pitre is still on this list.",
   hired: "Javier Abrica accepted and started Nov 2.",
 };
 
