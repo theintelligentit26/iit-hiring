@@ -1,10 +1,4 @@
-const STATUS_CLASS = {
-  requested: "st-requested",
-  confirmed: "st-confirmed",
-  done: "st-done",
-  "no-show": "st-no-show",
-  cancelled: "st-cancelled",
-};
+import { InterviewStatusControl } from "./interview-status.jsx";
 
 function textOrDash(value) {
   let text = typeof value === "string" ? value.trim() : "";
@@ -25,20 +19,13 @@ function slotLabel(value) {
   }).format(date)} PT`;
 }
 
-function questionsNotes(row) {
-  let parts = [row.questions, row.notes]
-    .map((value) => (typeof value === "string" ? value.trim() : ""))
-    .filter(Boolean);
-  return parts.join("\n\n") || "—";
-}
-
-export function ScheduleTab({ rows, phase, scoreFor }) {
+export function ScheduleTab({ rows, phase }) {
   return (
     <div role="tabpanel" id="panel-schedule" aria-labelledby="tab-sched">
       <h1>Interview schedule</h1>
       <p className="lede">
-        Requested times and confirmed slots. A confirmed slot is shown in
-        Pacific time, or “not set” until one is booked.
+        Not contacted -&gt; Invited -&gt; Replied -&gt; Scheduled (set the time)
+        -&gt; Done. No-show and Declined are exits.
       </p>
       {phase === "loading" ? (
         <p className="empty">Loading the interview schedule…</p>
@@ -53,36 +40,26 @@ export function ScheduleTab({ rows, phase, scoreFor }) {
                 <th className="name" scope="col">
                   Name
                 </th>
-                <th scope="col">Requested</th>
-                <th scope="col">Confirmed slot</th>
-                <th scope="col">Status</th>
-                <th scope="col">Notice</th>
-                <th scope="col">Pay</th>
-                <th scope="col">Location</th>
-                <th scope="col">Questions/notes</th>
                 <th className="score" scope="col">
                   Score
                 </th>
+                <th scope="col">Status</th>
+                <th scope="col">Requested</th>
+                <th scope="col">Confirmed slot</th>
+                <th scope="col">Notes</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.name}>
                   <td className="name">{row.name}</td>
+                  <td className="score">{textOrDash(row.score)}</td>
+                  <td>
+                    <InterviewStatusControl name={row.name} status={row.status} />
+                  </td>
                   <td>{textOrDash(row.requested)}</td>
                   <td>{slotLabel(row.scheduled_at)}</td>
-                  <td>
-                    <span
-                      className={`pill ${STATUS_CLASS[row.status] || "st-requested"}`}
-                    >
-                      {row.status || "—"}
-                    </span>
-                  </td>
-                  <td>{textOrDash(row.notice)}</td>
-                  <td>{textOrDash(row.pay_note)}</td>
-                  <td>{textOrDash(row.location_note)}</td>
-                  <td className="qnotes">{questionsNotes(row)}</td>
-                  <td className="score">{scoreFor(row.name)}</td>
+                  <td className="qnotes">{textOrDash(row.notes)}</td>
                 </tr>
               ))}
             </tbody>

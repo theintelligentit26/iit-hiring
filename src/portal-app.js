@@ -2,6 +2,7 @@ import * as l from "react";
 import { createRoot } from "react-dom/client";
 import { createClient as Pa } from "@supabase/supabase-js";
 import { QUICK_VIEW_URL } from "./script-content.js";
+import { InterviewStatusControl, ScreenScorecard } from "./interview-status.jsx";
 import { ScheduleTab } from "./schedule-tab.jsx";
 import { ScriptTab } from "./script-tab.jsx";
 import {
@@ -211,7 +212,9 @@ function ro() {
         if (!n || e) return;
         let { data: r, error: a } = await n
           .from(`hiring_candidates`)
-          .select(`id,data,rank,updated_at`)
+          .select(
+            `id,data,rank,updated_at,interview_status,interview_requested,interview_at,interview_notes,interview_updated_at,screen_scorecard`,
+          )
           .order(`rank`, { ascending: !0 });
         if (e) return;
         if (a || !r) {
@@ -231,7 +234,24 @@ function ro() {
           );
           return;
         }
-        let o = r.map(eo).filter((e) => e !== null),
+        let o = r
+          .map((row) => {
+            let mapped = eo(row);
+            if (!mapped) return null;
+            mapped.interviewStatus =
+              typeof row.interview_status == `string` && row.interview_status
+                ? row.interview_status
+                : `not_contacted`;
+            mapped.interviewAt = row.interview_at || null;
+            mapped.interviewNotes =
+              typeof row.interview_notes == `string` ? row.interview_notes : ``;
+            mapped.screenScorecard =
+              row.screen_scorecard && typeof row.screen_scorecard == `object`
+                ? row.screen_scorecard
+                : null;
+            return mapped;
+          })
+          .filter((e) => e !== null),
           s = r.reduce((e, t) => (t.updated_at > e ? t.updated_at : e), ``);
         ((i = !0),
           t({ rows: o, updatedAt: s || null, phase: `ready`, notice: `` }));
@@ -248,6 +268,7 @@ function ro() {
       return (
         window.addEventListener(`focus`, s),
         document.addEventListener(`visibilitychange`, c),
+        window.addEventListener(`iit-interview-saved`, a),
         (async () => {
           let o = await Ra();
           e ||
@@ -284,6 +305,7 @@ function ro() {
             window.clearInterval(o),
             window.removeEventListener(`focus`, s),
             document.removeEventListener(`visibilitychange`, c),
+            window.removeEventListener(`iit-interview-saved`, a),
             r && n?.removeChannel(r),
             (n = null));
         }
@@ -447,10 +469,7 @@ function scheduleList() {
         if (!n || e) return;
         let { data: r, error: a } = await n
           .from(`hiring_interview_schedule`)
-          .select(
-            `name,requested,scheduled_at,status,notice,pay_note,location_note,questions,notes,sort,updated_at`,
-          )
-          .order(`sort`, { ascending: !0 });
+          .select(`name,requested,scheduled_at,status,notes,score,rank`);
         if (e) return;
         if (a || !r) {
           t((e) =>
@@ -469,11 +488,8 @@ function scheduleList() {
           );
           return;
         }
-        let o = r
-          .filter((row) => row && typeof row.name == `string` && row.name)
-          .slice()
-          .sort((a, b) => (Number(a.sort) || 0) - (Number(b.sort) || 0));
-        let s = r.reduce((e, t) => (t.updated_at > e ? t.updated_at : e), ``);
+        let o = r.filter((row) => row && typeof row.name == `string` && row.name);
+        let s = ``;
         ((i = !0),
           t({ rows: o, updatedAt: s || null, phase: `ready`, notice: `` }));
       }
@@ -489,6 +505,7 @@ function scheduleList() {
       return (
         window.addEventListener(`focus`, s),
         document.addEventListener(`visibilitychange`, c),
+        window.addEventListener(`iit-interview-saved`, a),
         (async () => {
           let o = await Ra();
           e ||
@@ -525,6 +542,7 @@ function scheduleList() {
             window.clearInterval(o),
             window.removeEventListener(`focus`, s),
             document.removeEventListener(`visibilitychange`, c),
+            window.removeEventListener(`iit-interview-saved`, a),
             r && n?.removeChannel(r),
             (n = null));
         }
@@ -1822,11 +1840,6 @@ function Co() {
             ? (0, z.jsx)(ScheduleTab, {
                 rows: schedule.rows,
                 phase: schedule.phase,
-                scoreFor: (name) => {
-                  let row = n.find((item) => item.name === name);
-                  if (!row) return `—`;
-                  return row.noScore ? `resume not found` : row.s10 || `—`;
-                },
               })
             : re === `script`
             ? (0, z.jsxs)(`div`, {
@@ -2124,6 +2137,7 @@ function Co() {
                                   (0, z.jsx)(`col`, { className: `int` }),
                                   (0, z.jsx)(`col`, { className: `notes` }),
                                   (0, z.jsx)(`col`, { className: `rec` }),
+                                  (0, z.jsx)(`col`, { className: `iv` }),
                                 ],
                               }),
                               (0, z.jsx)(`thead`, {
@@ -2178,6 +2192,11 @@ function Co() {
                                       scope: `col`,
                                       title: `Recommendation`,
                                       children: `Rec.`,
+                                    }),
+                                    (0, z.jsx)(`th`, {
+                                      className: `iv`,
+                                      scope: `col`,
+                                      children: `Interview`,
                                     }),
                                   ],
                                 }),
@@ -2294,6 +2313,13 @@ function Co() {
                                             children: isHired(t.name)
                                               ? `Hired`
                                               : Xa(t.grp),
+                                          }),
+                                        }),
+                                        (0, z.jsx)(`td`, {
+                                          className: `iv`,
+                                          children: (0, z.jsx)(InterviewStatusControl, {
+                                            name: t.name,
+                                            status: t.interviewStatus,
                                           }),
                                         }),
                                       ],
@@ -2614,6 +2640,13 @@ function Eo({
                     children: e.noScore ? `resume not found` : e.rec2,
                   }),
                 }),
+                (0, z.jsx)(Do, {
+                  label: `Interview`,
+                  children: (0, z.jsx)(InterviewStatusControl, {
+                    name: e.name,
+                    status: e.interviewStatus,
+                  }),
+                }),
                 (0, z.jsx)(Do, { label: `Next step`, children: e.next }),
                 (0, z.jsx)(Do, { label: `Indeed status`, children: e.st }),
                 (0, z.jsx)(Do, {
@@ -2651,6 +2684,9 @@ function Eo({
                 }),
               ],
             }),
+            e.screenScorecard
+              ? (0, z.jsx)(ScreenScorecard, { card: e.screenScorecard })
+              : null,
             (0, z.jsxs)(`table`, {
               className: `rubric`,
               children: [

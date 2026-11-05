@@ -24,5 +24,24 @@
 .sched-table .pill.st-requested{color:var(--amber);border-color:#e6c48a}
 .sched-table .pill.st-confirmed,.sched-table .pill.st-done{color:var(--green);border-color:#b7e0c8}
 .sched-table .pill.st-no-show,.sched-table .pill.st-cancelled{color:var(--red);border-color:#f0c2c4}
+.rank-table th.iv,.rank-table td.iv{white-space:nowrap;min-width:9rem}
+.iv-wrap{position:relative;display:inline-block}
+.iv-pill{cursor:pointer;border:0;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700;line-height:1.35}
+.iv-not_contacted{background:#e5e7eb;color:#4b5563}
+.iv-invited{background:#dbeafe;color:#1d4ed8}
+.iv-replied{background:#fef3c7;color:#a16207}
+.iv-scheduled{background:#ede9fe;color:#6d28d9}
+.iv-done{background:#dcfce7;color:#166534}
+.iv-no_show{background:#fee2e2;color:#b91c1c}
+.iv-declined{background:#374151;color:#f9fafb}
+.iv-pop{position:fixed;z-index:30;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;min-width:230px;box-shadow:0 8px 24px #14324f22}
+.iv-pop>button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:transparent;border:0;border-radius:6px;padding:6px 4px;cursor:pointer}
+.iv-pop>button.on,.iv-pop>button:hover{background:var(--soft)}
+.iv-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.iv-when,.iv-pass{display:grid;gap:6px;margin-top:8px}
+.iv-when input,.iv-pass input{width:100%}
+.iv-error{color:var(--red);font-weight:700;margin:8px 0 0}
+.scorecard{margin:8px 0 12px}
+.scorecard ol{margin:8px 0;padding-left:22px}
 #panel-script>.phone-script{margin-top:0}
 .q-block .good-answer,.q-block .red-flag{margin-left:0}
