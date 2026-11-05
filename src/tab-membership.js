@@ -22,12 +22,10 @@ export const INVITE_BATCHES = [
   },
   {
     id: "pending",
-    label: "Batch 2: invite not sent yet",
+    label: "Batch 2: Invite sent on Indeed Nov 4, status Interviewing",
     names: [
-      "Chase Reyes",
       "Devin Rumer",
       "Trishan Vithanage",
-      "Hassana Adamou",
       "Steve Quintanilla",
       "Daniel Mora",
       "Aluizio Couto",
