@@ -29,7 +29,6 @@ export const INVITE_BATCHES = [
       "Steve Quintanilla",
       "Daniel Mora",
       "Aluizio Couto",
-      "Andrew Walldez",
       "Antonio Gutierrez",
       "Daniel Zaragoza",
     ],
