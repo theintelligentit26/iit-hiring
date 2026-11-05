@@ -43,5 +43,22 @@
 .iv-error{color:var(--red);font-weight:700;margin:8px 0 0}
 .scorecard{margin:8px 0 12px}
 .scorecard ol{margin:8px 0;padding-left:22px}
+.script-doc{font-size:16px;line-height:1.5}
+.script-doc h1{font-size:28px;margin:0 0 12px}
+.script-doc h2{font-size:22px;margin:28px 0 10px}
+.script-doc h3{font-size:18px;margin:22px 0 8px}
+.script-doc p{margin:0 0 10px}
+.script-doc ul,.script-doc ol{margin:8px 0 12px;padding-left:22px}
+.script-doc li{margin:4px 0}
+.script-doc li ul{margin:4px 0}
+.script-table-wrap{overflow-x:auto;margin:0 0 16px}
+.script-doc table.script-md{border-collapse:collapse;width:max-content;min-width:100%;font-size:14px}
+.script-doc table.script-md th,.script-doc table.script-md td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.script-doc table.script-md th{background:#f3f7fb;white-space:nowrap}
+.script-doc blockquote.say p{margin:0 0 8px}
+.script-doc blockquote.say p:last-child{margin-bottom:0}
+.script-doc pre{overflow:auto;background:var(--soft);border-radius:8px;padding:12px;font-size:13px;line-height:1.45}
+.script-doc code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+.script-doc hr{border:0;border-top:1px solid var(--line);margin:24px 0}
 #panel-script>.phone-script{margin-top:0}
 .q-block .good-answer,.q-block .red-flag{margin-left:0}
