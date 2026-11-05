@@ -13,5 +13,16 @@
 .score-card .muted{font-size:13px;font-weight:400}
 .phone-script h1{margin-top:0}
 .batch-head{margin:18px 0 8px;font-size:18px;line-height:1.35}
+.sched-scroll{background:var(--paper);border:1px solid var(--line);border-radius:8px;overflow:auto}
+.sched-table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;font-size:14px}
+.sched-table caption{clip:rect(0 0 0 0);width:1px;height:1px;position:absolute;overflow:hidden}
+.sched-table th,.sched-table td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:8px 10px;font-size:14px;line-height:1.35}
+.sched-table th{white-space:nowrap;background:#f3f7fb;min-width:max-content;font-weight:650;position:sticky;top:0;z-index:2}
+.sched-table td.name,.sched-table th.name{white-space:nowrap}
+.sched-table td.score,.sched-table th.score{white-space:nowrap;font-weight:700}
+.sched-table td.qnotes{white-space:pre-wrap;min-width:12rem;max-width:22rem}
+.sched-table .pill.st-requested{color:var(--amber);border-color:#e6c48a}
+.sched-table .pill.st-confirmed,.sched-table .pill.st-done{color:var(--green);border-color:#b7e0c8}
+.sched-table .pill.st-no-show,.sched-table .pill.st-cancelled{color:var(--red);border-color:#f0c2c4}
 #panel-script>.phone-script{margin-top:0}
 .q-block .good-answer,.q-block .red-flag{margin-left:0}

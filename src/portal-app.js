@@ -2,6 +2,7 @@ import * as l from "react";
 import { createRoot } from "react-dom/client";
 import { createClient as Pa } from "@supabase/supabase-js";
 import { QUICK_VIEW_URL } from "./script-content.js";
+import { ScheduleTab } from "./schedule-tab.jsx";
 import { ScriptTab } from "./script-tab.jsx";
 import {
   INVITE_BATCHES,
@@ -419,6 +420,104 @@ function hiddenList() {
                   updatedAt: null,
                   phase: `error`,
                   notice: `Supabase is not configured, so the 15+ yrs list cannot load.`,
+                }));
+        })(),
+        () => {
+          ((e = !0),
+            window.clearInterval(o),
+            window.removeEventListener(`focus`, s),
+            document.removeEventListener(`visibilitychange`, c),
+            r && n?.removeChannel(r),
+            (n = null));
+        }
+      );
+    }, []),
+    e
+  );
+}
+function scheduleList() {
+  let [e, t] = (0, l.useState)(Za);
+  return (
+    (0, l.useEffect)(() => {
+      let e = !1,
+        n = null,
+        r = null,
+        i = !1;
+      async function a() {
+        if (!n || e) return;
+        let { data: r, error: a } = await n
+          .from(`hiring_interview_schedule`)
+          .select(
+            `name,requested,scheduled_at,status,notice,pay_note,location_note,questions,notes,sort,updated_at`,
+          )
+          .order(`sort`, { ascending: !0 });
+        if (e) return;
+        if (a || !r) {
+          t((e) =>
+            e.rows.length
+              ? {
+                  ...e,
+                  phase: `ready`,
+                  notice: `Showing the last interview schedule. The latest refresh failed.`,
+                }
+              : {
+                  rows: [],
+                  updatedAt: null,
+                  phase: `error`,
+                  notice: `The interview schedule could not be loaded. Refresh the page.`,
+                },
+          );
+          return;
+        }
+        let o = r
+          .filter((row) => row && typeof row.name == `string` && row.name)
+          .slice()
+          .sort((a, b) => (Number(a.sort) || 0) - (Number(b.sort) || 0));
+        let s = r.reduce((e, t) => (t.updated_at > e ? t.updated_at : e), ``);
+        ((i = !0),
+          t({ rows: o, updatedAt: s || null, phase: `ready`, notice: `` }));
+      }
+      let o = window.setInterval(() => {
+          a();
+        }, 15e3),
+        s = () => {
+          a();
+        },
+        c = () => {
+          document.visibilityState === `visible` && a();
+        };
+      return (
+        window.addEventListener(`focus`, s),
+        document.addEventListener(`visibilitychange`, c),
+        (async () => {
+          let o = await Ra();
+          e ||
+            (o
+              ? ((n = Pa(o.url, o.anonKey, {
+                  auth: { persistSession: !1, autoRefreshToken: !1 },
+                })),
+                await a(),
+                !e &&
+                  i &&
+                  (r = n
+                    .channel(`hiring-interview-schedule-live`)
+                    .on(
+                      `postgres_changes`,
+                      {
+                        event: `*`,
+                        schema: `public`,
+                        table: `hiring_interview_schedule`,
+                      },
+                      () => {
+                        a();
+                      },
+                    )
+                    .subscribe()))
+              : t({
+                  rows: [],
+                  updatedAt: null,
+                  phase: `error`,
+                  notice: `Supabase is not configured, so the interview schedule cannot load.`,
                 }));
         })(),
         () => {
@@ -1505,6 +1604,7 @@ function Co() {
   let e = xo(),
     t = ro(),
     hidden = hiddenList(),
+    schedule = scheduleList(),
     n = t.rows,
     [r, i] = (0, l.useState)(``),
     [a, o] = (0, l.useState)(`All`),
@@ -1523,7 +1623,8 @@ function Co() {
     ae = n.filter((e) => e.st.startsWith(`Contacting`)).length,
     pool = re === `yrs` ? hidden.rows : n,
     listPhase = re === `yrs` ? hidden.phase : t.phase,
-    listNotice = re === `yrs` ? hidden.notice : t.notice,
+    listNotice =
+      re === `yrs` ? hidden.notice : re === `sched` ? schedule.notice : t.notice,
     oe = (0, l.useMemo)(() => {
       let e = {};
       for (let t of pool) t.presetNote && (e[t.name] = t.presetNote);
@@ -1678,9 +1779,11 @@ function Co() {
                   ? null
                   : tab.id === `yrs`
                     ? hidden.rows.length
-                    : tab.id === `all`
-                      ? n.length
-                      : n.filter((row) => onTab(row.name, tab.id)).length;
+                    : tab.id === `sched`
+                      ? schedule.rows.length
+                      : tab.id === `all`
+                        ? n.length
+                        : n.filter((row) => onTab(row.name, tab.id)).length;
               return (0, z.jsx)(
                 `button`,
                 {
@@ -1690,7 +1793,11 @@ function Co() {
                   className: re === tab.id ? `tab on` : `tab`,
                   "aria-selected": re === tab.id,
                   "aria-controls":
-                    tab.id === `script` ? `panel-script` : `panel-candidates`,
+                    tab.id === `script`
+                      ? `panel-script`
+                      : tab.id === `sched`
+                        ? `panel-schedule`
+                        : `panel-candidates`,
                   onClick: () => fe(tab.id),
                   children:
                     count === null ? tab.label : `${tab.label} (${count})`,
@@ -1711,7 +1818,17 @@ function Co() {
                 children: listNotice,
               })
             : null,
-          re === `script`
+          re === `sched`
+            ? (0, z.jsx)(ScheduleTab, {
+                rows: schedule.rows,
+                phase: schedule.phase,
+                scoreFor: (name) => {
+                  let row = n.find((item) => item.name === name);
+                  if (!row) return `—`;
+                  return row.noScore ? `resume not found` : row.s10 || `—`;
+                },
+              })
+            : re === `script`
             ? (0, z.jsxs)(`div`, {
                 role: `tabpanel`,
                 id: `panel-script`,
