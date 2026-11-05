@@ -291,6 +291,149 @@ function ro() {
     e
   );
 }
+function str(e) {
+  return typeof e == `string` ? e : ``;
+}
+function hiddenRow(e) {
+  let t = e.data;
+  if (!t || typeof t != `object` || t.name !== e.id) return null;
+  let missing = typeof t.s10 != `string` || !t.s10.trim(),
+    row = eo({
+      id: e.id,
+      rank: e.rank,
+      data: {
+        ...t,
+        s10: missing ? `` : t.s10,
+        grp: typeof t.grp == `string` ? t.grp : ``,
+        sRec: typeof t.sRec == `string` ? t.sRec : ``,
+        presetNote: missing
+          ? `resume not found`
+          : typeof t.presetNote == `string`
+            ? t.presetNote
+            : ``,
+      },
+    });
+  if (!row) return null;
+  row.noScore = missing;
+  row.hiddenReason = str(e.hidden_reason);
+  row.commute = str(row.commute);
+  row.st = str(row.st);
+  row.sYrs = str(row.sYrs);
+  row.sCom = str(row.sCom);
+  row.loc = str(row.loc);
+  row.certs = str(row.certs);
+  row.msp = str(row.msp);
+  row.rec2 = str(row.rec2);
+  row.paid = str(row.paid);
+  row.avail = str(row.avail);
+  row.verif = str(row.verif);
+  row.risks = str(row.risks);
+  row.next = str(row.next);
+  row.yrs = str(row.yrs);
+  row.bonus = Number(row.bonus) || 0;
+  row.base = Number(row.base) || 0;
+  row.nv = Number(row.nv) || 0;
+  row.total = Number(row.total) || 0;
+  if (!Array.isArray(row.tools)) row.tools = [];
+  if (!Array.isArray(row.sub)) row.sub = [];
+  if (!Array.isArray(row.strengths)) row.strengths = [];
+  if (!Array.isArray(row.gaps)) row.gaps = [];
+  if (!Array.isArray(row.questions)) row.questions = [];
+  return row;
+}
+function hiddenList() {
+  let [e, t] = (0, l.useState)(Za);
+  return (
+    (0, l.useEffect)(() => {
+      let e = !1,
+        n = null,
+        r = null,
+        i = !1;
+      async function a() {
+        if (!n || e) return;
+        let { data: r, error: a } = await n
+          .from(`hiring_candidates_hidden`)
+          .select(`id,data,rank,hidden_reason,hidden_at,updated_at`)
+          .order(`rank`, { ascending: !0 });
+        if (e) return;
+        if (a || !r) {
+          t((e) =>
+            e.rows.length
+              ? {
+                  ...e,
+                  phase: `ready`,
+                  notice: `Showing the last 15+ yrs list. The latest refresh failed.`,
+                }
+              : {
+                  rows: [],
+                  updatedAt: null,
+                  phase: `error`,
+                  notice: `The 15+ yrs list could not be loaded. Refresh the page.`,
+                },
+          );
+          return;
+        }
+        let o = r.map(hiddenRow).filter((e) => e !== null),
+          s = r.reduce((e, t) => (t.updated_at > e ? t.updated_at : e), ``);
+        ((i = !0),
+          t({ rows: o, updatedAt: s || null, phase: `ready`, notice: `` }));
+      }
+      let o = window.setInterval(() => {
+          a();
+        }, 15e3),
+        s = () => {
+          a();
+        },
+        c = () => {
+          document.visibilityState === `visible` && a();
+        };
+      return (
+        window.addEventListener(`focus`, s),
+        document.addEventListener(`visibilitychange`, c),
+        (async () => {
+          let o = await Ra();
+          e ||
+            (o
+              ? ((n = Pa(o.url, o.anonKey, {
+                  auth: { persistSession: !1, autoRefreshToken: !1 },
+                })),
+                await a(),
+                !e &&
+                  i &&
+                  (r = n
+                    .channel(`hiring-candidates-hidden-live`)
+                    .on(
+                      `postgres_changes`,
+                      {
+                        event: `*`,
+                        schema: `public`,
+                        table: `hiring_candidates_hidden`,
+                      },
+                      () => {
+                        a();
+                      },
+                    )
+                    .subscribe()))
+              : t({
+                  rows: [],
+                  updatedAt: null,
+                  phase: `error`,
+                  notice: `Supabase is not configured, so the 15+ yrs list cannot load.`,
+                }));
+        })(),
+        () => {
+          ((e = !0),
+            window.clearInterval(o),
+            window.removeEventListener(`focus`, s),
+            document.removeEventListener(`visibilitychange`, c),
+            r && n?.removeChannel(r),
+            (n = null));
+        }
+      );
+    }, []),
+    e
+  );
+}
 var io = [
     `Set up a PC under a desk: power, monitor, network, peripherals, tidy cabling.`,
     `Verify Windows 11 and updates, join the device to Entra ID and confirm Intune enrollment.`,
@@ -1361,6 +1504,7 @@ var So = [`Interview`, `Phone screen`, `Hold`, `Decline`];
 function Co() {
   let e = xo(),
     t = ro(),
+    hidden = hiddenList(),
     n = t.rows,
     [r, i] = (0, l.useState)(``),
     [a, o] = (0, l.useState)(`All`),
@@ -1371,16 +1515,20 @@ function Co() {
     [g, _] = (0, l.useState)(!1),
     [v, y] = (0, l.useState)(`All`),
     [b, x] = (0, l.useState)(`Score`),
+    sortMemory = (0, l.useRef)(`Score`),
     [S, ee] = (0, l.useState)([]),
     [te, C] = (0, l.useState)({}),
     [ne, w] = (0, l.useState)(``),
     [re, ie] = (0, l.useState)(`invites`),
     ae = n.filter((e) => e.st.startsWith(`Contacting`)).length,
+    pool = re === `yrs` ? hidden.rows : n,
+    listPhase = re === `yrs` ? hidden.phase : t.phase,
+    listNotice = re === `yrs` ? hidden.notice : t.notice,
     oe = (0, l.useMemo)(() => {
       let e = {};
-      for (let t of n) t.presetNote && (e[t.name] = t.presetNote);
+      for (let t of pool) t.presetNote && (e[t.name] = t.presetNote);
       return e;
-    }, [n]);
+    }, [pool]);
   function se(t) {
     return e.known[t] ? (e.notes[t] ?? ``) : (oe[t] ?? ``);
   }
@@ -1406,9 +1554,9 @@ function Co() {
   }
   let de = (0, l.useMemo)(() => {
       let t = r.trim().toLowerCase();
-      return n
+      return pool
         .filter((n) =>
-          (re !== `all` && re !== `script` && !onTab(n.name, re)) ||
+          (re !== `yrs` && re !== `all` && re !== `script` && !onTab(n.name, re)) ||
           (a !== `All` && n.grp !== a) ||
           (s !== `All` && n.paid !== s) ||
           (u !== `All` && n.mspShort !== u) ||
@@ -1426,16 +1574,18 @@ function Co() {
         .sort((e, t) =>
           b === `Name`
             ? e.name.localeCompare(t.name)
-            : b === `Commute`
-              ? Ba(e.commute) - Ba(t.commute) || t.total - e.total
-              : (b === `Recommendation` &&
-                  So.indexOf(e.grp) - So.indexOf(t.grp)) ||
-                t.total - e.total,
+            : b === `Rank`
+              ? e.rank - t.rank || t.total - e.total
+              : b === `Commute`
+                ? Ba(e.commute) - Ba(t.commute) || t.total - e.total
+                : (b === `Recommendation` &&
+                    So.indexOf(e.grp) - So.indexOf(t.grp)) ||
+                  t.total - e.total,
         );
-    }, [n, r, a, s, u, f, m, g, v, b, re, e.fav, e.notes, e.known, e.done, oe]),
+    }, [pool, r, a, s, u, f, m, g, v, b, re, e.fav, e.notes, e.known, e.done, oe]),
     tabRows =
-      re === `all` || re === `script`
-        ? n
+      re === `yrs` || re === `all` || re === `script`
+        ? pool
         : n.filter((row) => onTab(row.name, re)),
     T = tabRows.filter((row) => S.includes(row.name)),
     groups =
@@ -1446,8 +1596,12 @@ function Co() {
             rows: de.filter((row) => batch.names.includes(row.name)),
           }))
         : [{ id: `main`, label: ``, rows: de }];
-  function fe(e) {
-    (ie(e), window.scrollTo({ top: 0 }));
+  function fe(tab) {
+    if (tab === `yrs` && re !== `yrs`) {
+      sortMemory.current = b;
+      x(`Rank`);
+    } else if (tab !== `yrs` && re === `yrs`) x(sortMemory.current);
+    (ie(tab), window.scrollTo({ top: 0 }));
   }
   return (0, z.jsxs)(z.Fragment, {
     children: [
@@ -1522,9 +1676,11 @@ function Co() {
               let count =
                 tab.id === `script`
                   ? null
-                  : tab.id === `all`
-                    ? n.length
-                    : n.filter((row) => onTab(row.name, tab.id)).length;
+                  : tab.id === `yrs`
+                    ? hidden.rows.length
+                    : tab.id === `all`
+                      ? n.length
+                      : n.filter((row) => onTab(row.name, tab.id)).length;
               return (0, z.jsx)(
                 `button`,
                 {
@@ -1548,11 +1704,11 @@ function Co() {
       (0, z.jsxs)(`main`, {
         className: `page`,
         children: [
-          t.notice
+          listNotice
             ? (0, z.jsx)(`p`, {
                 className: `banner`,
                 role: `alert`,
-                children: t.notice,
+                children: listNotice,
               })
             : null,
           re === `script`
@@ -1755,6 +1911,7 @@ function Co() {
                             set: x,
                             options: [
                               `Score`,
+                              `Rank`,
                               `Recommendation`,
                               `Commute`,
                               `Name`,
@@ -1960,9 +2117,15 @@ function Co() {
                                           }),
                                         }),
                                         (0, z.jsx)(`td`, {
-                                          className: `score score-cell`,
-                                          title: `${t.s10}/10`,
-                                          children: t.s10,
+                                          className: t.noScore
+                                            ? `score muted`
+                                            : `score score-cell`,
+                                          title: t.noScore
+                                            ? `resume not found`
+                                            : `${t.s10}/10`,
+                                          children: t.noScore
+                                            ? `resume not found`
+                                            : t.s10,
                                         }),
                                         (0, z.jsx)(`td`, {
                                           className: t.yrsRed
@@ -2028,10 +2191,10 @@ function Co() {
                             ? (0, z.jsx)(`p`, {
                                 className: `empty`,
                                 children:
-                                  t.phase === `loading`
+                                  listPhase === `loading`
                                     ? `Loading candidates…`
-                                    : n.length === 0
-                                      ? `No candidates are in the shared list yet.`
+                                    : pool.length === 0
+                                      ? `No candidates are in this list yet.`
                                       : `No candidates match these filters.`,
                               })
                             : null,
@@ -2304,7 +2467,9 @@ function Eo({
       className: n ? `card hot` : `card`,
       children: [
         (0, z.jsxs)(`summary`, {
-          children: [e.rank, `. `, r ? `★ ` : ``, e.name, ` — `, e.s10, `/10`],
+          children: e.noScore
+            ? [e.rank, `. `, r ? `★ ` : ``, e.name, ` — resume not found`]
+            : [e.rank, `. `, r ? `★ ` : ``, e.name, ` — `, e.s10, `/10`],
         }),
         (0, z.jsxs)(`div`, {
           className: `card-body`,
@@ -2328,8 +2493,8 @@ function Eo({
                 (0, z.jsx)(Do, {
                   label: `Recommendation`,
                   children: (0, z.jsx)(`span`, {
-                    className: Ha(e.rec2),
-                    children: e.rec2,
+                    className: e.noScore ? void 0 : Ha(e.rec2),
+                    children: e.noScore ? `resume not found` : e.rec2,
                   }),
                 }),
                 (0, z.jsx)(Do, { label: `Next step`, children: e.next }),
@@ -2387,7 +2552,9 @@ function Eo({
                 (0, z.jsxs)(`tbody`, {
                   children: [
                     t.map(([t, n], r) =>
-                      (0, z.jsxs)(
+                      e.noScore
+                        ? null
+                        : (0, z.jsxs)(
                         `tr`,
                         {
                           children: [
@@ -2401,7 +2568,9 @@ function Eo({
                         t,
                       ),
                     ),
-                    (0, z.jsxs)(`tr`, {
+                    e.noScore
+                      ? null
+                      : (0, z.jsxs)(`tr`, {
                       children: [
                         (0, z.jsx)(`td`, { children: `Weighted average` }),
                         (0, z.jsx)(`td`, { children: `100%` }),
@@ -2410,7 +2579,9 @@ function Eo({
                         }),
                       ],
                     }),
-                    (0, z.jsxs)(`tr`, {
+                    e.noScore
+                      ? null
+                      : (0, z.jsxs)(`tr`, {
                       children: [
                         (0, z.jsx)(`td`, { children: `Cert bonus` }),
                         (0, z.jsxs)(`td`, { children: [e.nv, ` verified`] }),
@@ -2423,7 +2594,9 @@ function Eo({
                       children: [
                         (0, z.jsx)(`td`, { children: `Overall` }),
                         (0, z.jsx)(`td`, {}),
-                        (0, z.jsxs)(`td`, { children: [e.s10, `/10`] }),
+                        (0, z.jsx)(`td`, {
+                          children: e.noScore ? `resume not found` : `${e.s10}/10`,
+                        }),
                       ],
                     }),
                   ],

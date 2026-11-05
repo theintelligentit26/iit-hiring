@@ -46,6 +46,7 @@ export const TAB_ORDER = [
   { id: "review", label: "Must review" },
   { id: "all", label: "All candidates" },
   { id: "hired", label: "Hired" },
+  { id: "yrs", label: "15+ yrs review" },
   { id: "script", label: "Interview Script & Phone Screening" },
 ];
 
@@ -53,6 +54,7 @@ export const TAB_BLURB = {
   review:
     "Nolen Pitre is still on this list.",
   hired: "Javier Abrica accepted and started Nov 2.",
+  yrs: "Kept off the main candidate list. Not declined on Indeed. Ranked by rank. A blank score means the resume was not found.",
 };
 
 export function membersOf(tabId) {
