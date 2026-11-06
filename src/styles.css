@@ -60,5 +60,9 @@
 .script-doc pre{overflow:auto;background:var(--soft);border-radius:8px;padding:12px;font-size:13px;line-height:1.45}
 .script-doc code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
 .script-doc hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+.today-switch{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.today-switch button{background:var(--soft);border:1px solid var(--line);border-radius:8px;cursor:pointer;min-height:44px;padding:8px 14px;font-weight:650}
+.today-switch button.on{background:#fff;border-color:var(--navy);color:var(--navy)}
+.phone-script .for-you strong{letter-spacing:.03em;text-transform:uppercase;margin-bottom:2px;font-size:12px;display:block}
 #panel-script>.phone-script{margin-top:0}
 .q-block .good-answer,.q-block .red-flag{margin-left:0}

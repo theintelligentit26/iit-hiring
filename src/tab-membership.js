@@ -44,6 +44,7 @@ export const TAB_MEMBERS = {
 export const TAB_ORDER = [
   { id: "invites", label: "Interview invites" },
   { id: "sched", label: "Interview schedule" },
+  { id: "today", label: "Today's interviews" },
   { id: "review", label: "Must review" },
   { id: "all", label: "All candidates" },
   { id: "hired", label: "Hired" },

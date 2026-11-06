@@ -5,6 +5,7 @@ import { QUICK_VIEW_URL } from "./script-content.js";
 import { InterviewStatusControl, ScreenScorecard } from "./interview-status.jsx";
 import { ScheduleTab } from "./schedule-tab.jsx";
 import { ScriptTab } from "./script-tab.jsx";
+import { TodayInterviews } from "./today-interviews.jsx";
 import {
   INVITE_BATCHES,
   TAB_BLURB,
@@ -1648,6 +1649,14 @@ function Co() {
       for (let t of pool) t.presetNote && (e[t.name] = t.presetNote);
       return e;
     }, [pool]);
+  (0, l.useEffect)(() => {
+    function openToday() {
+      ie(`today`);
+      window.scrollTo({ top: 0 });
+    }
+    window.addEventListener(`iit-open-today`, openToday);
+    return () => window.removeEventListener(`iit-open-today`, openToday);
+  }, []);
   function se(t) {
     return e.known[t] ? (e.notes[t] ?? ``) : (oe[t] ?? ``);
   }
@@ -1793,7 +1802,7 @@ function Co() {
             "aria-label": `Hiring portal`,
             children: TAB_ORDER.map((tab) => {
               let count =
-                tab.id === `script`
+                tab.id === `script` || tab.id === `today`
                   ? null
                   : tab.id === `yrs`
                     ? hidden.rows.length
@@ -1815,7 +1824,9 @@ function Co() {
                       ? `panel-script`
                       : tab.id === `sched`
                         ? `panel-schedule`
-                        : `panel-candidates`,
+                        : tab.id === `today`
+                          ? `panel-today`
+                          : `panel-candidates`,
                   onClick: () => fe(tab.id),
                   children:
                     count === null ? tab.label : `${tab.label} (${count})`,
@@ -1841,6 +1852,8 @@ function Co() {
                 rows: schedule.rows,
                 phase: schedule.phase,
               })
+            : re === `today`
+            ? (0, z.jsx)(TodayInterviews, {})
             : re === `script`
             ? (0, z.jsxs)(`div`, {
                 role: `tabpanel`,
