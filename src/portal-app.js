@@ -1649,14 +1649,6 @@ function Co() {
       for (let t of pool) t.presetNote && (e[t.name] = t.presetNote);
       return e;
     }, [pool]);
-  (0, l.useEffect)(() => {
-    function openToday() {
-      ie(`today`);
-      window.scrollTo({ top: 0 });
-    }
-    window.addEventListener(`iit-open-today`, openToday);
-    return () => window.removeEventListener(`iit-open-today`, openToday);
-  }, []);
   function se(t) {
     return e.known[t] ? (e.notes[t] ?? ``) : (oe[t] ?? ``);
   }
@@ -1833,6 +1825,13 @@ function Co() {
                 },
                 tab.id,
               );
+            }),
+          }),
+          (0, z.jsx)(`p`, {
+            className: `ava-foot`,
+            children: (0, z.jsx)(`a`, {
+              href: `./ava-script.html`,
+              children: `Ava phone screen`,
             }),
           }),
         ],

@@ -49,7 +49,6 @@ export const TAB_ORDER = [
   { id: "all", label: "All candidates" },
   { id: "hired", label: "Hired" },
   { id: "yrs", label: "15+ yrs review" },
-  { id: "script", label: "Interview Script & Phone Screening" },
 ];
 
 export const TAB_BLURB = {

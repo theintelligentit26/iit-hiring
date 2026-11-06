@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: "dist",
     emptyOutDir: true,
     rollupOptions: {
-      input: "portal.html",
+      input: ["portal.html", "ava-script.html"],
     },
   },
 });

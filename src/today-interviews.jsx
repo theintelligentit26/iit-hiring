@@ -176,12 +176,10 @@ function PersonScript({ person }) {
         ))}
       </ul>
       <h3>Script, say this</h3>
-      {person.steps.map((step, index) => (
-        <details key={step.title} className="step" open={index === 0}>
-          <summary>
-            {index + 1}. {step.title}
-          </summary>
-          <div className="step-body">
+      <ol className="say-list">
+        {person.steps.map((step) => (
+          <li key={step.title}>
+            <h3>{step.title}</h3>
             {step.say.map((line) => (
               <p className="say" key={line}>
                 {line}
@@ -193,9 +191,9 @@ function PersonScript({ person }) {
                 {step.note}
               </p>
             ) : null}
-          </div>
-        </details>
-      ))}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

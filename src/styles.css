@@ -60,6 +60,11 @@
 .script-doc pre{overflow:auto;background:var(--soft);border-radius:8px;padding:12px;font-size:13px;line-height:1.45}
 .script-doc code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
 .script-doc hr{border:0;border-top:1px solid var(--line);margin:24px 0}
+.say-list{margin:8px 0 16px;padding-left:1.6rem}
+.say-list>li{margin:0 0 18px}
+.say-list>li>h3{margin:0 0 6px;font-size:17px}
+.ava-foot{margin:0;padding:2px 16px 6px;background:#fff;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
+.ava-foot a{color:var(--muted)}
 .today-switch{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
 .today-switch button{background:var(--soft);border:1px solid var(--line);border-radius:8px;cursor:pointer;min-height:44px;padding:8px 14px;font-weight:650}
 .today-switch button.on{background:#fff;border-color:var(--navy);color:var(--navy)}
