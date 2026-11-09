@@ -411,7 +411,6 @@ If the candidate volunteers any of these, say *"Thanks, you don't need to share 
 - Started from the candidate list in Hooman's shared doc, then checked every claim against the candidate's resume PDF (`/home/box/Downloads/Resume*.pdf`, read with pdftotext) and the Supabase `hiring_candidates` records (read-only, 2026-11-04).
 - Removed: pay, 1099, commute, 8am-start, notice/start-date, license/car and field-visit repeats (Section B's one-line terms check covers what applies). Dropped hands-on "walk me through configuring X" items (too technical; the call has just two talk-through questions, H1 and H2).
 - Rephrased anything we couldn't verify (e.g., LinkedIn or Indeed comparisons) into neutral "walk me through" or "confirm" questions.
-- **Dropped:** Javier Abrica (Supabase: hired, started Nov 2). He wasn't in the shared doc either.
 - **Not added:** candidates in Supabase who weren't in the shared doc and haven't been contacted (e.g., John Nuncio).
 - **Status key:** ✅ verified on the resume and/or Supabase · ✏️ changed (corrected or reworded) · ➕ new (found during the check).
 - Senior-title candidates get the K4 senior follow-up automatically, so "why this level" isn't repeated here.

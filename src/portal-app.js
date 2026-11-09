@@ -10,7 +10,6 @@ import { NoReplyTab } from "./no-reply.jsx";
 import {
   TAB_BLURB,
   TAB_ORDER,
-  isHired,
   onTab,
 } from "./tab-membership.js";
 
@@ -2448,13 +2447,9 @@ function Co() {
                                         (0, z.jsx)(`td`, {
                                           className: `rec rec-cell`,
                                           children: (0, z.jsx)(`span`, {
-                                            className: `pill ${isHired(t.name) ? `good` : Ha(t.grp)}`,
-                                            title: isHired(t.name)
-                                              ? `Hired`
-                                              : t.rec2 || t.sRec,
-                                            children: isHired(t.name)
-                                              ? `Hired`
-                                              : Xa(t.grp),
+                                            className: `pill ${Ha(t.grp)}`,
+                                            title: t.rec2 || t.sRec,
+                                            children: Xa(t.grp),
                                           }),
                                         }),
                                         (0, z.jsx)(`td`, {
