@@ -1,11 +1,24 @@
 import { InterviewStatusControl } from "./interview-status.jsx";
 
 function textOrDash(value) {
-  let text = typeof value === "string" ? value.trim() : "";
-  return text || "—";
+  let text = typeof value === "string" ? value.trim() : value == null ? "" : String(value).trim();
+  text = text.replaceAll("mid-morning", "mid morning");
+  return text || "not set";
 }
 
-function slotLabel(value) {
+function pacificDay(value) {
+  let date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Los_Angeles",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+function slotLabel(value, status) {
+  if (status !== "scheduled" && status !== "done") return "not set";
   if (!value) return "not set";
   let date = new Date(value);
   if (Number.isNaN(date.getTime())) return "not set";
@@ -20,17 +33,18 @@ function slotLabel(value) {
 }
 
 export function ScheduleTab({ rows, phase }) {
+  let today = pacificDay(new Date());
+  let shown = rows.filter((row) => pacificDay(row.scheduled_at) === today);
   return (
     <div role="tabpanel" id="panel-schedule" aria-labelledby="tab-sched">
       <h1>Interview schedule</h1>
       <p className="lede">
-        Not contacted -&gt; Invited -&gt; Replied -&gt; Scheduled (set the time)
-        -&gt; Done. No-show and Declined are exits.
+        Not contacted, then Invited, then Replied, then Scheduled (set the time), then Done. No show and Declined are exits. Today only. A time in Requested is not a confirmed slot until the status is Scheduled.
       </p>
       {phase === "loading" ? (
         <p className="empty">Loading the interview schedule…</p>
-      ) : rows.length === 0 ? (
-        <p className="empty">No interviews are on the schedule yet.</p>
+      ) : shown.length === 0 ? (
+        <p className="empty">No interviews are on the schedule for today.</p>
       ) : (
         <div className="sched-scroll">
           <table className="sched-table">
@@ -50,7 +64,7 @@ export function ScheduleTab({ rows, phase }) {
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
+              {shown.map((row) => (
                 <tr key={row.name}>
                   <td className="name">{row.name}</td>
                   <td className="score">{textOrDash(row.score)}</td>
@@ -58,7 +72,7 @@ export function ScheduleTab({ rows, phase }) {
                     <InterviewStatusControl name={row.name} status={row.status} />
                   </td>
                   <td>{textOrDash(row.requested)}</td>
-                  <td>{slotLabel(row.scheduled_at)}</td>
+                  <td>{slotLabel(row.scheduled_at, row.status)}</td>
                   <td className="qnotes">{textOrDash(row.notes)}</td>
                 </tr>
               ))}

@@ -68,6 +68,9 @@
 .today-switch{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
 .today-switch button{background:var(--soft);border:1px solid var(--line);border-radius:8px;cursor:pointer;min-height:44px;padding:8px 14px;font-weight:650}
 .today-switch button.on{background:#fff;border-color:var(--navy);color:var(--navy)}
+.status-note{border-radius:8px;margin:0 0 12px;padding:10px 12px;font-size:16px;font-weight:650}
+.status-note.wait{color:#6a4b16;background:#fff6e8;border:1px solid #e6c48a}
+.status-note.ok{color:var(--green);background:#eef8f2;border:1px solid #b7e0c8}
 .phone-script .for-you strong{letter-spacing:.03em;text-transform:uppercase;margin-bottom:2px;font-size:12px;display:block}
 #panel-script>.phone-script{margin-top:0}
 .q-block .good-answer,.q-block .red-flag{margin-left:0}
