@@ -145,6 +145,26 @@ function PersonScript({ person }) {
       <p className={person.id === "walter" ? "status-note ok" : "status-note wait"}>
         {person.facts[0][1]}
       </p>
+      <h2>Interview questions</h2>
+      <h3>Script, say this</h3>
+      <ol className="say-list">
+        {person.steps.map((step) => (
+          <li key={step.title}>
+            <h3>{step.title}</h3>
+            {step.say.map((line) => (
+              <p className="say" key={line}>
+                {line}
+              </p>
+            ))}
+            {step.note ? (
+              <p className="for-you">
+                <strong>For you</strong>
+                {step.note}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ol>
       <dl className="props">
         {person.facts.slice(1).map(([label, value]) => (
           <div key={label}>
@@ -185,25 +205,6 @@ function PersonScript({ person }) {
           <li key={item}>{item}</li>
         ))}
       </ul>
-      <h3>Script, say this</h3>
-      <ol className="say-list">
-        {person.steps.map((step) => (
-          <li key={step.title}>
-            <h3>{step.title}</h3>
-            {step.say.map((line) => (
-              <p className="say" key={line}>
-                {line}
-              </p>
-            ))}
-            {step.note ? (
-              <p className="for-you">
-                <strong>For you</strong>
-                {step.note}
-              </p>
-            ) : null}
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }

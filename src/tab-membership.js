@@ -8,9 +8,9 @@
 export const TAB_MEMBERS = {};
 
 export const TAB_ORDER = [
+  { id: "today", label: "Today's interviews" },
   { id: "invites", label: "Interview invites" },
   { id: "sched", label: "Interview schedule" },
-  { id: "today", label: "Today's interviews" },
   { id: "all", label: "All candidates" },
   { id: "yrs", label: "15+ yrs review" },
   { id: "noreply", label: "No reply" },
