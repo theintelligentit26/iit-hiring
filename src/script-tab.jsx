@@ -1,8 +1,8 @@
-import markdown from "./phone-screen-v3.3.md?raw";
+import { PHONE_SCREEN_MD } from "./phone-screen-source.js";
 import { QUICK_VIEW_URL } from "./script-content.js";
 import { renderScriptMarkdown } from "./script-markdown.js";
 
-const html = renderScriptMarkdown(markdown);
+const html = renderScriptMarkdown(PHONE_SCREEN_MD);
 
 export function ScriptTab() {
   return (

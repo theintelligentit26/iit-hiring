@@ -16,62 +16,6 @@ const AFTER = [
 
 const PEOPLE = [
   {
-    id: "trishan",
-    name: "Trishan Vithanage",
-    when: "Friday Nov 6, 11:15 to 11:30 AM Pacific",
-    switchLabel: "Trishan, 11:15 to 11:30",
-    facts: [
-      ["Score", "6.8, Phone screen band, rank 15"],
-      ["Location", "Los Angeles / Glendale, about 20 miles"],
-      ["IT experience", "About 2 dedicated years"],
-      ["MSP", "Yes, VC3 from Jan 2025 to Apr 2026"],
-      ["Pay note", "Asked for $30 an hour or more; OK with 1099"],
-      ["Start", "Said he can start immediately; resume still shows Essential Access since May 2026"],
-      ["Certs", "Genetec Security Center; CompTIA A+ and Google IT Support in progress"],
-    ],
-    warning:
-      "Ask these if nothing else: He said he can start right away, but the resume still lists a current contract at Essential Access. Also confirm whether $30 is enough, since he asked for $30 or more.",
-    resume: [
-      ["IT Support Specialist 2, contract", "Essential Access", "May 2026 to present"],
-      ["Lead Deployment Specialist, contract", "VC3, Rancho Cucamonga", "Jan 2025 to Apr 2026"],
-      ["Surveillance Infrastructure Technician, contract", "San Manuel Gaming Commission, Highland", "Jun 2024 to Jan 2025"],
-      ["IT technician / tech support", "Geek Squad, Dish Network, and two other local orgs", "2020 to 2024, not counted as dedicated IT"],
-    ],
-    summary:
-      "Current work is helping people with Windows, Microsoft 365, accounts, passwords, onboarding, and remote support. At VC3 he went to different client sites to roll out computers and help those offices get set up.",
-    listen: [
-      "A clear end date for Essential Access that matches starting immediately",
-      "Whether $30 an hour works, or he needs more than the posted range",
-      "How he talks to users and clients, especially when someone is upset",
-      "How he figures things out when he does not know the answer",
-      "Whether he likes small-company work, where he is often the person the client talks to",
-      "What it was like going from one client office to another at VC3",
-    ],
-    steps: [
-      { title: "Recording", say: ["Hi Trishan, thanks for making time. Just so you know, I'd like to record this for our review. Is that okay?"] },
-      { title: "Terms", say: ["Quick check before we dive in. As we mentioned in our Indeed message, this is on site in Woodland Hills, Monday to Friday, nine to five, as a 1099 position at twenty to thirty an hour depending on experience. The role also includes driving to client sites around LA, and mileage is reimbursed. Is all of that still good for you?"] },
-      { title: "If pay is a question", say: ["You mentioned thirty or more. Does the top of that range work for you?"], note: "Never ask what he made before." },
-      { title: "If travel is a question", say: ["Do you have reliable transportation to get to client sites around LA?"], note: "A clear no ends the call politely." },
-      { title: "Start date", say: ["And if things move forward, when could you start?", "Your resume shows you are still on a contract at Essential Access. When does that end?"], note: "He said immediately. Then ask the second line." },
-      { title: "Work authorization", say: ["And are you legally authorized to work in the US, and will you now or in the future require visa sponsorship?"] },
-      { title: "About us", say: ["Quick bit about us: Intelligent IT is a boutique managed IT company here in Woodland Hills, started in 2015 by Ryan and me, and we still run it. We're the IT department for small and mid-sized businesses around LA. We're small on purpose, so clients know us by name and stay with us about nine years on average. Okay, enough about us. Tell me about you."] },
-      { title: "Their role", say: ["Walk me through your current role. What does a typical day look like for you, and who are you usually helping?"] },
-      { title: "Working with different clients", say: ["At VC3 you were in different client offices. What was that like, and how did you handle going from one company's setup to another?"] },
-      { title: "Why looking", say: ["What's got you looking for something new right now?"] },
-      { title: "Why this role", say: ["What made you apply for this role? And where would you like your career to be in two or three years?"] },
-      { title: "Working with clients", say: ["An office manager calls, pretty upset. Email's been down for two hours, and it's the third problem this week. What do you say to her in the first minute?"] },
-      { title: "Non-technical people", say: ["How do you explain a technical problem to someone who isn't technical, and just wants it fixed?"] },
-      { title: "Troubleshooting", say: ["Tell me about a time something broke and you didn't know the answer right away. How did you figure it out?"] },
-      { title: "Tools", say: ["What tools did you use day to day to help people? Things like tickets, Microsoft 365, remote support, or anything else. Which ones were you actually hands on with?"] },
-      { title: "Culture", say: ["We're a small company, so you'd often be the person a client talks to, and there isn't a bigger team to hand the work to. How do you feel about that kind of setup?"] },
-      { title: "When you're stuck", say: ["When you get stuck and there isn't someone next to you to take over, what do you usually do?"] },
-      { title: "Certs", say: ["Almost done, just a quick wrap up. Do you have any certifications?"] },
-      { title: "References", say: ["Could you reply in your Indeed message thread with one or two professional references, ideally a former manager or supervisor, with their name, the company, how you worked together, and a phone number or email? And are you okay with us contacting them?"] },
-      { title: "Their questions", say: ["Before we wrap up, do you have any questions for us, or any concerns about the role?"] },
-      { title: "Close", say: ["We review every call. If it's a fit, we'll reach out about next steps. Thanks so much for your time today, Trishan."] },
-    ],
-  },
-  {
     id: "steve",
     name: "Steve Quintanilla",
     when: "Friday Nov 6, 1:00 to 1:15 PM Pacific",
@@ -205,7 +149,7 @@ export function TodayInterviews() {
     <div role="tabpanel" id="panel-today" aria-labelledby="tab-today" className="phone-script">
       <h1>Today's interviews</h1>
       <p className="lede">
-        Friday Nov 6, 2026. People first scripts for the two calls. Say the lines in the boxes. Do not add questions.
+        Friday Nov 6, 2026. People first script for the call. Say the lines in the boxes. Do not add questions.
       </p>
       <div className="today-switch" role="group" aria-label="Choose today's interview">
         {PEOPLE.map((item) => (

@@ -505,12 +505,6 @@ If the candidate volunteers any of these, say *"Thanks, you don't need to share 
    - Corrected: the "MSP claim not on resume" in the Nov 4 test scorecard came from **Hooman's role-play test**, not Steve's real call, so it isn't used as a fact about Steve. The resume shows N-able only among AV/classroom systems.
 - Note: no phone or email on the resume, so schedule through Indeed.
 
-### Trishan Vithanage (6.8 · Los Angeles)
-1. ✅ "At VC3, what did a typical client deployment look like, and what did you do in Kaseya?" (Resume: VC3 contract, Jan 2025–Apr 2026, Kaseya VSA ✅.)
-2. ➕ "Your recent roles have all been contracts. Are you looking for something longer term now?" (Resume: Essential Access, VC3 and San Manuel are all contracts.)
-3. ➕ "Your resume groups 2020 to 2024 under a few organizations, like Geek Squad and Dish. Can you walk me through that period?" (Undated on the resume.)
-- Dropped: "When does Essential Access end?" (covered by B2). The MFA reset is covered by H1.
-
 ### Aluizio Couto (6.6 · Van Nuys)
 1. ✅ "What have you been up to since City First Bank wrapped up in April?" (Resume: Mar 2023–Apr 2026.)
 2. ✅ "At the bank, what did you use N-central for: patching, alerts, scripting?" (Resume ✅.)

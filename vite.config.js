@@ -8,7 +8,12 @@ export default defineConfig({
     outDir: "dist",
     emptyOutDir: true,
     rollupOptions: {
-      input: ["portal.html", "ava-script.html"],
+      input: ["portal.html", "ava-page.html"],
+      output: {
+        sanitizeFileName(name) {
+          return name.replace(/\s+/g, "");
+        },
+      },
     },
   },
 });
