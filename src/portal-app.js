@@ -6,8 +6,8 @@ import { InterviewStatusControl, ScreenScorecard } from "./interview-status.jsx"
 import { ScheduleTab } from "./schedule-tab.jsx";
 import { ScriptTab } from "./script-tab.jsx";
 import { TodayInterviews } from "./today-interviews.jsx";
+import { NoReplyTab } from "./no-reply.jsx";
 import {
-  INVITE_BATCHES,
   TAB_BLURB,
   TAB_ORDER,
   isHired,
@@ -443,6 +443,108 @@ function hiddenList() {
                   updatedAt: null,
                   phase: `error`,
                   notice: `Supabase is not configured, so the 15+ yrs list cannot load.`,
+                }));
+        })(),
+        () => {
+          ((e = !0),
+            window.clearInterval(o),
+            window.removeEventListener(`focus`, s),
+            document.removeEventListener(`visibilitychange`, c),
+            r && n?.removeChannel(r),
+            (n = null));
+        }
+      );
+    }, []),
+    e
+  );
+}
+function noReplyList() {
+  let [e, t] = (0, l.useState)(Za);
+  return (
+    (0, l.useEffect)(() => {
+      let e = !1,
+        n = null,
+        r = null,
+        i = !1;
+      async function a() {
+        if (!n || e) return;
+        let { data: r, error: a } = await n
+          .from(`hiring_candidates_noreply`)
+          .select(
+            `id,data,rank,updated_at,interview_status,interview_requested,interview_at,interview_notes,interview_updated_at,screen_scorecard,moved_reason,moved_at`,
+          )
+          .order(`rank`, { ascending: !0 });
+        if (e) return;
+        if (a || !r) {
+          t((e) =>
+            e.rows.length
+              ? {
+                  ...e,
+                  phase: `ready`,
+                  notice: `Showing the last no reply list. The latest refresh failed.`,
+                }
+              : {
+                  rows: [],
+                  updatedAt: null,
+                  phase: `error`,
+                  notice: `The no reply list could not be loaded. Refresh the page.`,
+                },
+          );
+          return;
+        }
+        let o = r
+          .map((row) => {
+            let mapped = hiddenRow(row);
+            if (!mapped) return null;
+            mapped.movedReason = str(row.moved_reason);
+            return mapped;
+          })
+          .filter((row) => row !== null);
+        let s = r.reduce((e, t) => (t.updated_at > e ? t.updated_at : e), ``);
+        ((i = !0),
+          t({ rows: o, updatedAt: s || null, phase: `ready`, notice: `` }));
+      }
+      let o = window.setInterval(() => {
+          a();
+        }, 15e3),
+        s = () => {
+          a();
+        },
+        c = () => {
+          document.visibilityState === `visible` && a();
+        };
+      return (
+        window.addEventListener(`focus`, s),
+        document.addEventListener(`visibilitychange`, c),
+        (async () => {
+          let o = await Ra();
+          e ||
+            (o
+              ? ((n = Pa(o.url, o.anonKey, {
+                  auth: { persistSession: !1, autoRefreshToken: !1 },
+                })),
+                await a(),
+                !e &&
+                  i &&
+                  (r = n
+                    .channel(`hiring-candidates-noreply-live`)
+                    .on(
+                      `postgres_changes`,
+                      {
+                        event: `*`,
+                        schema: `public`,
+                        table: `hiring_candidates_noreply`,
+                      },
+                      () => {
+                        a();
+                      },
+                    )
+                    .subscribe()))
+              : t({
+                  rows: [],
+                  updatedAt: null,
+                  phase: `error`,
+                  notice: `Supabase is not configured, so the no reply list cannot load.`,
                 }));
         })(),
         () => {
@@ -1623,6 +1725,7 @@ function Co() {
   let e = xo(),
     t = ro(),
     hidden = hiddenList(),
+    noreply = noReplyList(),
     schedule = scheduleList(),
     n = t.rows,
     [r, i] = (0, l.useState)(``),
@@ -1643,7 +1746,13 @@ function Co() {
     pool = re === `yrs` ? hidden.rows : n,
     listPhase = re === `yrs` ? hidden.phase : t.phase,
     listNotice =
-      re === `yrs` ? hidden.notice : re === `sched` ? schedule.notice : t.notice,
+      re === `yrs`
+        ? hidden.notice
+        : re === `noreply`
+          ? noreply.notice
+          : re === `sched`
+            ? schedule.notice
+            : t.notice,
     oe = (0, l.useMemo)(() => {
       let e = {};
       for (let t of pool) t.presetNote && (e[t.name] = t.presetNote);
@@ -1676,7 +1785,12 @@ function Co() {
       let t = r.trim().toLowerCase();
       return pool
         .filter((n) =>
-          (re !== `yrs` && re !== `all` && re !== `script` && !onTab(n.name, re)) ||
+          (re === `invites` && n.interviewStatus !== `invited`) ||
+          (re !== `yrs` &&
+            re !== `all` &&
+            re !== `script` &&
+            re !== `invites` &&
+            !onTab(n.name, re)) ||
           (a !== `All` && n.grp !== a) ||
           (s !== `All` && n.paid !== s) ||
           (u !== `All` && n.mspShort !== u) ||
@@ -1704,17 +1818,21 @@ function Co() {
         );
     }, [pool, r, a, s, u, f, m, g, v, b, re, e.fav, e.notes, e.known, e.done, oe]),
     tabRows =
-      re === `yrs` || re === `all` || re === `script`
-        ? pool
-        : n.filter((row) => onTab(row.name, re)),
+      re === `invites`
+        ? n.filter((row) => row.interviewStatus === `invited`)
+        : re === `yrs` || re === `all` || re === `script`
+          ? pool
+          : n.filter((row) => onTab(row.name, re)),
     T = tabRows.filter((row) => S.includes(row.name)),
     groups =
       re === `invites`
-        ? INVITE_BATCHES.map((batch) => ({
-            id: batch.id,
-            label: batch.label,
-            rows: de.filter((row) => batch.names.includes(row.name)),
-          }))
+        ? [
+            {
+              id: `sent`,
+              label: `Batch 3: invited Nov 9`,
+              rows: de,
+            },
+          ]
         : [{ id: `main`, label: ``, rows: de }];
   function fe(tab) {
     if (tab === `yrs` && re !== `yrs`) {
@@ -1796,9 +1914,14 @@ function Co() {
               let count =
                 tab.id === `script` || tab.id === `today`
                   ? null
-                  : tab.id === `yrs`
+                  :                 tab.id === `yrs`
                     ? hidden.rows.length
-                    : tab.id === `sched`
+                    : tab.id === `noreply`
+                      ? noreply.rows.length
+                      : tab.id === `invites`
+                        ? n.filter((row) => row.interviewStatus === `invited`)
+                            .length
+                        : tab.id === `sched`
                       ? schedule.rows.length
                       : tab.id === `all`
                         ? n.length
@@ -1818,7 +1941,9 @@ function Co() {
                         ? `panel-schedule`
                         : tab.id === `today`
                           ? `panel-today`
-                          : `panel-candidates`,
+                          : tab.id === `noreply`
+                            ? `panel-noreply`
+                            : `panel-candidates`,
                   onClick: () => fe(tab.id),
                   children:
                     count === null ? tab.label : `${tab.label} (${count})`,
@@ -1853,6 +1978,11 @@ function Co() {
               })
             : re === `today`
             ? (0, z.jsx)(TodayInterviews, {})
+            : re === `noreply`
+            ? (0, z.jsx)(NoReplyTab, {
+                rows: noreply.rows,
+                phase: noreply.phase,
+              })
             : re === `script`
             ? (0, z.jsxs)(`div`, {
                 role: `tabpanel`,

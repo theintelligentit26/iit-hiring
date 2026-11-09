@@ -2,42 +2,11 @@
 // Edit these arrays to move people between tabs.
 // "All candidates" always shows every row from public.hiring_candidates.
 // Names must match the row id (data->>'name'). Do not rename rows here.
-// Interview invites is one tab, shown as the two batches below.
-
-export const INVITE_BATCHES = [
-  {
-    id: "sent",
-    label: "Batch 1: invite sent on Indeed Nov 4, status Interviewing",
-    names: [
-      "Humberto Gutierrez",
-      "Nick Mitevski",
-      "Gene Berdnik",
-      "Geordin Smith",
-      "Alexander Valencia Bran",
-      "Marco Hernandez",
-      "Walter Calderon",
-      "Justin Caven",
-      "Brian Chu",
-    ],
-  },
-  {
-    id: "pending",
-    label: "Batch 2: Invite sent on Indeed Nov 4, status Interviewing",
-    names: [
-      "Devin Rumer",
-      "Trishan Vithanage",
-      "Steve Quintanilla",
-      "Daniel Mora",
-      "Aluizio Couto",
-      "Antonio Gutierrez",
-      "Daniel Zaragoza",
-    ],
-  },
-];
+// Interview invites is everyone in hiring_candidates whose interview status is invited.
+// No reply names live only in hiring_candidates_noreply. Do not list them here.
 
 export const TAB_MEMBERS = {
-  invites: INVITE_BATCHES.flatMap((batch) => batch.names),
-  review: ["Nolen Pitre"],
+  review: [],
   hired: ["Javier Abrica"],
 };
 
@@ -49,11 +18,11 @@ export const TAB_ORDER = [
   { id: "all", label: "All candidates" },
   { id: "hired", label: "Hired" },
   { id: "yrs", label: "15+ yrs review" },
+  { id: "noreply", label: "No reply" },
 ];
 
 export const TAB_BLURB = {
-  review:
-    "Nolen Pitre is still on this list.",
+  review: "No one is on this list right now.",
   hired: "Javier Abrica accepted and started Nov 2.",
   yrs: "Kept off the main candidate list. Not declined on Indeed. Ranked by rank. A blank score means the resume was not found.",
 };
