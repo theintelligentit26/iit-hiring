@@ -1740,7 +1740,7 @@ function Co() {
     [S, ee] = (0, l.useState)([]),
     [te, C] = (0, l.useState)({}),
     [ne, w] = (0, l.useState)(``),
-    [re, ie] = (0, l.useState)(`today`),
+    [re, ie] = (0, l.useState)(`all`),
     ae = n.filter((e) => e.st.startsWith(`Contacting`)).length,
     pool = re === `yrs` ? hidden.rows : n,
     listPhase = re === `yrs` ? hidden.phase : t.phase,
